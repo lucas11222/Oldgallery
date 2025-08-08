@@ -9,12 +9,20 @@
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
 	<nav class="navbar bg-body-tertiary">
 		<div class="container-fluid">
-		  <a class="navbar-brand">Oldstragram</a>
-		  <div class="d-flex">
+		  <a class="navbar-brand" href="/">Oldstragram</a>
+		  <div class="d-flex btn gap-2">
 			<a href="/login" class="btn btn-outline-success">Login</a>
-			<a href="/signin" class="btn btn-outline-success">Login</a>
+			<a href="/signin" class="btn btn-outline-success">Signin</a>
 		  </div>
 		</div>
 	</nav>
+	<div class="position-absolute top-50 start-50 translate-middle text-center">
+		<div class="card">
+			<div class="card-body">
+				Hello! This is Oldstragram, an platform inspired by instragram that theres a catch....
+				When you login. You need to have the same user agent as when you created the account. Or else you cannot login.
+				<p>User agent: {{user_agent}}</p>
+  		</div>
+	</div>
 </body>
 </html>
