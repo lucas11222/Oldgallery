@@ -24,8 +24,15 @@ def index():
 def login():
     user_agent = request.user_agent
     return render_template('login.html', user_agent=user_agent)
-@app.route('/signin', methods=['GET', 'POST'])
-def signin():
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
+    if request.method == 'POST':
+        data = request.get_json()
+        username = data.get('username')
+        password = data.get('password')
+        user_agent = request.user_agent
+        print(username, password)
     user_agent = request.user_agent
-    return render_template('signin.html', user_agent=user_agent)
+    return render_template('signup.html', user_agent=user_agent)
+load_data()
 app.run(debug=True, port=6969)

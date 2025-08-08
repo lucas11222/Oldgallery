@@ -12,7 +12,7 @@
 		  <a class="navbar-brand" href="/">Oldstragram</a>
 		  <div class="d-flex btn gap-2">
 			<a href="/login" class="btn btn-outline-success">Login</a>
-			<a href="/signin" class="btn btn-outline-success">Signin</a>
+			<a href="/signup" class="btn btn-outline-success">Signup</a>
 		  </div>
 		</div>
 	</nav>
@@ -20,17 +20,17 @@
 		<p>User agent: {{user_agent}}</p>
 		<div class="card">
 			<div class="card-body">
-				<form>
+				<form action="/signup" method="post">
 					<div class="mb-3">
-						  <label for="exampleInputEmail1" class="form-label">Email address</label>
-						  <input type="email" class="form-control" id="InputEmailSignin" aria-describedby="emailHelp">
+						  <label for="InputEmailSignin" class="form-label">Email address</label>
+						  <input type="email" class="form-control" id="InputEmailSignin" aria-describedby="emailHelp" name="email">
 					</div>
 					<div class="mb-3">
-						  <label for="InputPassword1" class="form-label">Password</label>
-						  <input type="password" class="form-control" id="InputPassword">
+						  <label for="InputPasswordSignin" class="form-label">Password</label>
+						  <input type="password" class="form-control" id="InputPassword" name="password">
 					</div>
-					<button type="submit" class="btn btn-primary">Signin</button>
-				  </form>
+					<button type="submit" class="btn btn-primary">Signup</button>
+				  </form´>
 			</div>
   		</div>
 	</div>
