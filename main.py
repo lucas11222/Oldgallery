@@ -1,10 +1,30 @@
-from flask import Flask, render_template, request, session, redirect, url_for, flash
+from flask import Flask, render_template, request, session, redirect, url_for, flash, g
 import flask_login, bcrypt, sqlite3, os
 from dotenv import load_dotenv
 load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY")
+
+
+def get_db():
+    db = getattr(g, '_database', None)
+    if db is None:
+        db = g._database = sqlite3.connect(os.environ.get("DB_FILE", "database.db"))
+        db.execute("""
+            CREATE TABLE IF NOT EXISTS Users (
+                username TEXT PRIMARY KEY,
+                password TEXT NOT NULL,
+                password_salt TEXT NOT NULL
+            )
+        """)
+        db.commit()
+    return db
+@app.teardown_appcontext
+def close_connection(exception):
+    db = getattr(g, '_database', None)
+    if db is not None:
+        db.close()
 
 @app.route('/')
 def index():
