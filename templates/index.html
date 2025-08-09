@@ -22,6 +22,10 @@
 				Hello! This is Oldstragram, an platform inspired by instragram that theres a catch....
 				When you login. You need to have the same user agent as when you created the account. Or else you cannot login.
 				<p>User agent: {{user_agent}}</p>
+				{% with messages = get_flashed_messages(with_categories=true) %} {%
+					if messages %} {% for category, message in messages %}
+					<div class="alert alert-success" role="alert">{{ message }}</div>
+				{% endfor %} {% endif %} {% endwith %}
   		</div>
 	</div>
 </body>
