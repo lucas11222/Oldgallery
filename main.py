@@ -1,20 +1,10 @@
 from flask import Flask, render_template, request, session, redirect, url_for, flash
-import json, os
+import flask_login, bcrypt, sqlite3, os
+from dotenv import load_dotenv
+load_dotenv()
 
 app = Flask(__name__)
-app.secret_key = 'heres_the_secret_key'
-DATA_FILE = 'data.json'
-
-def load_data():
-    if not os.path.exists(DATA_FILE):
-        with open(DATA_FILE, 'w') as f:
-            json.dump({'users': {}}, f)
-    with open(DATA_FILE, 'r') as f:
-        return json.load(f)
-
-def save_data(data):
-    with open(DATA_FILE, 'w') as f:
-        json.dump(data, f, indent=2)
+app.secret_key = os.environ.get("SECRET_KEY")
 
 @app.route('/')
 def index():
@@ -22,17 +12,24 @@ def index():
     return render_template('index.html', user_agent=user_agent)
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    if request.method == 'POST':
+        data = request.form
+        username = data.get('username')
+        email = data.get('email')
+        password = data.get('password')
+        user_agent = request.user_agent
+        print(username, password, email, user_agent)
     user_agent = request.user_agent
     return render_template('login.html', user_agent=user_agent)
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
-        data = request.get_json()
+        data = request.form
         username = data.get('username')
+        email = data.get('email')
         password = data.get('password')
         user_agent = request.user_agent
-        print(username, password)
+        print(username, password, email)
     user_agent = request.user_agent
     return render_template('signup.html', user_agent=user_agent)
-load_data()
 app.run(debug=True, port=6969)
