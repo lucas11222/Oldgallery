@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html data-bs-theme="dark">
+<head>
+	<title>Oldgallery - Index</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+</head>
+<body>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
+	<nav class="navbar bg-body-tertiary">
+		<div class="container-fluid">
+		  <a class="navbar-brand" href="/">Oldgallery</a>
+		  <div class="d-flex btn gap-2">
+			<a href="/logout" class="btn btn-outline-success">Logout</a>
+			<a href="/dashboard/computers" class="btn btn-outline-success">Computers</a>
+			<a href="/dashboard/servers" class="btn btn-outline-success">Servers</a>		</div>
+		</div>
+	</nav>
+	<div class="m-3">
+		<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#AddComputer">Add computer</button>
+		{% with messages = get_flashed_messages(with_categories=true) %}
+		{% if messages %}
+			{% for category, message in messages %}
+				<div class="alert alert-{{ 'danger' if category == 'error' else category }}" 
+					 role="alert" style="width: 20rem; margin-top: 10px;">
+					{{ message }}
+				</div>
+			{% endfor %}
+		{% endif %}
+	{% endwith %}
+	</div>
+	<div class="modal fade" id="AddComputer" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="AddComputerLabel" aria-hidden="true">
+		<div class="modal-dialog">
+		  <div class="modal-content">
+			<div class="modal-header">
+			  <h1 class="modal-title fs-5" id="AddComputerLabel">Add computer</h1>
+			  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<form method="post" action="/dashboard/add_computer">
+					<div class="mb-3">
+					  <label for="computer-name" class="col-form-label">Name</label>
+					  <input type="text" class="form-control" id="computer-name" name="computer-name" required>
+					</div>
+					<div class="mb-3">
+					  <label for="computer-description" class="col-form-label">Description</label>
+					  <textarea class="form-control" id="computer-description" name="computer-description" required></textarea>
+					</div>
+					<div class="mb-3">
+						<label for="computer-os" class="col-form-label">OS</label>
+						<input type="text" class="form-control" id="computer-os" name="computer-os" required>
+					</div>
+					<div class="mb-3">
+						<label for="computer-ram" class="col-form-label">RAM (in GB)</label>
+						<input type="number" class="form-control" id="computer-ram" name="computer-ram" required>
+					</div>
+					<div class="mb-3">
+						<label for="computer-cpu" class="col-form-label">CPU</label>
+						<input type="text" class="form-control" id="computer-cpu" name="computer-cpu" required>
+					</div>
+					<div class="mb-3">
+						<label for="computer-gpu" class="col-form-label">GPU</label>
+						<input type="text" class="form-control" id="computer-gpu" name="computer-gpu" required>
+					</div>
+					<div class="mb-3">
+						<label for="computer-storage" class="col-form-label">Storage (in GB)</label>
+						<input type="number" class="form-control" id="computer-storage" name="computer-storage" required>
+					</div>
+					<button type="submit" class="btn btn-primary">Add computer</button>
+				</form>
+			</div>
+		  </div>
+		</div>
+	</div>
+	<div class="position-absolute top-50 start-50 translate-middle text-center" style="margin-top: 100px">
+		{% for item in rows %}
+			<div class="card" style="margin: 15px; width: 18rem;">
+				<div class="card-body">
+					<h5 class="card-title">{{ item.0 }}</h5>
+					<h6 class="card-subtitle mb-2 text-body-secondary">{{ item.1 }}</h6>
+					<a class="btn btn-danger" href="/dashboard/remove_computer?name={{ item.0 }}" role="button">Delete</a>
+  				</div>
+				<ul class="list-group list-group-flush">
+					<li class="list-group-item">OS: {{ item.2 }}</li>
+					<li class="list-group-item">RAM: {{ item.3 }}GB</li>
+					<li class="list-group-item">CPU: {{ item.4 }}</li>
+					<li class="list-group-item">GPU: {{ item.5 }}</li>
+					<li class="list-group-item">Storage: {{ item.6 }}GB</li>
+				</ul>
+			</div>
+		{% endfor %}
+</body>
+</html>
