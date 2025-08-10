@@ -1,10 +1,10 @@
-# Oldstragram (Old + Instragram)
+# Oldgallery
 
-## Oldstragram is a platform inspired by Instragram about old computers
+## Oldgallery is a computer gallery (An computer gallery is a gallery of all your computers.)
 
 # But....
 
-## When you login you need to have the same user agent as when you created the account.
+## When you login you need to type your user agent when you log in.
 
 # Vulnearvility:
 You can change the user agent with a extension

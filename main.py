@@ -21,6 +21,17 @@ def get_db():
                 password_salt TEXT NOT NULL
             )
         """)
+        db.execute("""
+            CREATE TABLE IF NOT EXISTS Computers (
+                username TEXT NOT NULL,
+                computer_name TEXT PRIMARY KEY,
+                os TEXT NOT NULL,
+                ram INTEGER NOT NULL,
+                cpu TEXT NOT NULL,
+                gpu TEXT NOT NULL,
+                storage INTEGER NOT NULL
+            )
+        """)
         db.commit()
     return db
 
@@ -42,7 +53,8 @@ def user_loader(user_id):
 @app.route('/')
 def index():
     user_agent = request.user_agent
-    return render_template('index.html', user_agent=user_agent)
+    logged_in = flask_login.current_user.is_authenticated
+    return render_template('index.html', user_agent=user_agent, logged_in=logged_in)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -50,7 +62,7 @@ def login():
         data = request.form
         email = data.get('email')
         password = data.get('password')
-        user_agent = request.user_agent.string
+        user_agent = data.get('user_agent')
         cur = get_db().cursor()
         cur.execute("SELECT password, password_salt, user_agent FROM Users WHERE email = ?", (email,))
         row = cur.fetchone()
@@ -68,13 +80,17 @@ def login():
             user = User()
             user.id = email
             flask_login.login_user(user, remember=True)
-            flash("logged in successfully :)", "success")
+            flash("logged in successfully :D", "success")
             return render_template('index.html', user_agent=user_agent)
         else:
             cur.close()
             flash("incorrect password :(", "error")
             return render_template('login.html', user_agent=user_agent)
     user_agent = request.user_agent
+    logged_in = flask_login.current_user.is_authenticated
+    if logged_in:
+        flash("you are already logged in :D", "success")
+        return redirect(url_for('index'))
     return render_template('login.html', user_agent=user_agent)
 
 @app.route('/signup', methods=['GET', 'POST'])
@@ -102,6 +118,30 @@ def signup():
         user = User()
         user.id = username
         flask_login.login_user(user, remember=True)
+        flash("signed up successfully :D", "success")
+        return render_template('index.html', user_agent=user_agent)
     user_agent = request.user_agent
+    logged_in = flask_login.current_user.is_authenticated
+    if logged_in:
+        flash("you are already logged in :D", "success")
+        return redirect(url_for('index'))
     return render_template('signup.html', user_agent=user_agent)
+
+@app.route('/logout')
+def logout():
+    flask_login.logout_user()
+    user_agent = request.user_agent.string
+    flash("log out :(", "success")
+    return render_template('index.html', user_agent=user_agent)
+
+#@app.route('/example')
+#@flask_login.login_required
+#def example():
+#    return "youre logged in! :D"
+
+@login_manager.unauthorized_handler
+def unauthorized_handler():
+    flash("you must be logged in to access this page :(", "error")
+    return redirect("/login")
+
 app.run(debug=True, port=6969)

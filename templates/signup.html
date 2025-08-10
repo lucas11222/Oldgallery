@@ -1,42 +1,78 @@
 <!DOCTYPE html>
 <html data-bs-theme="dark">
-<head>
-	<title>Oldstragram - Signin</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
-</head>
-<body>
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
-	<nav class="navbar bg-body-tertiary">
-		<div class="container-fluid">
-		  <a class="navbar-brand" href="/">Oldstragram</a>
-		  <div class="d-flex btn gap-2">
-			<a href="/login" class="btn btn-outline-success">Login</a>
-			<a href="/signup" class="btn btn-outline-success">Signup</a>
-		  </div>
-		</div>
-	</nav>
-	<div class="position-absolute top-50 start-50 translate-middle">
-		<p>User agent: {{user_agent}}</p>
-		<div class="card">
-			<div class="card-body">
-				<form action="/signup" method="post">
-					<div class="mb-3">
-						<label for="InputUsernameSignin" class="form-label">Username</label>
-						<input type="text" class="form-control" id="InputUsernameSignin" aria-describedby="usernameHelp" name="username">
-				    </div>
-					<div class="mb-3">
-						  <label for="InputEmailSignin" class="form-label">Email address</label>
-						  <input type="email" class="form-control" id="InputEmailSignin" aria-describedby="emailHelp" name="email">
-					</div>
-					<div class="mb-3">
-						  <label for="InputPasswordSignin" class="form-label">Password</label>
-						  <input type="password" class="form-control" id="InputPassword" name="password">
-					</div>
-					<button type="submit" class="btn btn-primary">Signup</button>
-				  </form´>
-			</div>
-  		</div>
-	</div>
-</body>
+  <head>
+    <title>Oldgallery - Signin</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
+      crossorigin="anonymous"
+    ></script>
+    <nav class="navbar bg-body-tertiary">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="/">Oldgallery</a>
+        <div class="d-flex btn gap-2">
+          <a href="/login" class="btn btn-outline-success">Login</a>
+          <a href="/signup" class="btn btn-outline-success">Signup</a>
+        </div>
+      </div>
+    </nav>
+    <div class="position-absolute top-50 start-50 translate-middle">
+      <p>User agent: {{user_agent}}</p>
+      <div class="card">
+        <div class="gap-2 card-body">
+          <form action="/signup" method="post">
+            <div class="mb-3">
+              <label for="InputUsername" class="form-label"
+                >Username</label
+              >
+              <input
+                type="text"
+                class="form-control"
+                id="InputUsername"
+                aria-describedby="usernameHelp"
+                name="username"
+              />
+            </div>
+            <div class="mb-3">
+              <label for="InputEmail" class="form-label"
+                >Email address</label
+              >
+              <input
+                type="email"
+                class="form-control"
+                id="InputEmail"
+                aria-describedby="emailHelp"
+                name="email"
+              />
+            </div>
+            <div class="mb-3">
+              <label for="InputPassword" class="form-label"
+                >Password</label
+              >
+              <input
+                type="password"
+                class="form-control"
+                id="InputPassword"
+                name="password"
+              />
+            </div>
+            <button type="submit" class="btn btn-primary">Signup</button>
+			{% with messages = get_flashed_messages(with_categories=true) %} {%
+				if messages %} {% for category, message in messages %}
+				<div class="alert alert-danger" style="margin-top: 15px" role="alert">{{ message }}</div>
+			{% endfor %} {% endif %} {% endwith %}
+          </form>
+        </div>
+      </div>
+    </div>
+  </body>
 </html>
