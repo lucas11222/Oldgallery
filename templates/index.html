@@ -12,12 +12,12 @@
 		  <a class="navbar-brand" href="/">Oldgallery</a>
 		  <div class="d-flex btn gap-2">
 			{% if current_user.is_authenticated %}
-			<a href="/logout" class="btn btn-outline-success">Logout</a>
-			<a href="/dashboard/computers" class="btn btn-outline-success">Computers</a>
-			<a href="/dashboard/server" class="btn btn-outline-success">Servers</a>
+			<a href="/settings" class="btn btn-primary">Settings</a>
+			<a href="/dashboard/computers" class="btn btn-primary">Computers</a>
+			<a href="/dashboard/servers" class="btn btn-primary">Servers</a>
 			{% else %}
-			<a href="/login" class="btn btn-outline-success">Login</a>
-			<a href="/signup" class="btn btn-outline-success">Signup</a>
+			<a href="/login" class="btn btn-primary">Login</a>
+			<a href="/signup" class="btn btn-primary">Signup</a>
 			{% endif %}
 		</div>
 		</div>

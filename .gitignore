@@ -4,3 +4,5 @@ Include
 Lib
 Scripts
 .env
+database.db
+*.db

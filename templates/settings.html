@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html data-bs-theme="dark">
+  <head>
+    <title>Oldgallery - Settings</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
+      crossorigin="anonymous"
+    ></script>
+    <nav class="navbar bg-body-tertiary">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="/">Oldgallery</a>
+        <div class="d-flex btn gap-2">
+          <a href="/settings" class="btn btn-primary">Settings</a>
+          <a href="/dashboard/computers" class="btn btn-primary">Computers</a>
+          <a href="/dashboard/servers" class="btn btn-primary">Servers</a>
+        </div>
+      </div>
+    </nav>
+    <div class="position-absolute top-50 start-50 translate-middle">
+      <div class="card">
+        <div class="card-body">
+          {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="alert alert-{{ 'danger' if category == 'error' else category }}"
+                 role="alert" style="width: 20rem; margin-top: 10px;">
+                {{ message }}
+              </div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+          <div class="m-3 text-center">
+            <h5 class="card-title">Settings</h5>
+          </div>
+          <div class="m-3">
+            <button
+              type="button"
+              class="btn btn-danger"
+              data-bs-toggle="modal"
+              data-bs-target="#DeleteAccountAlert"
+            >
+              Delete account
+            </button>
+          </a>
+          </div>
+          <div class="m-3">
+            <a
+            type="button"
+            class="btn btn-warning"
+            href="/logout"
+          >
+            Logout
+          </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="modal fade"
+      id="DeleteAccountAlert"
+      data-bs-backdrop="static"
+      data-bs-keyboard="false"
+      tabindex="-1"
+      aria-labelledby="DeleteAccountAlertLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="DeleteAccountAlertLabel">
+              Delete account
+            </h1>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">Are you sure? This is irreversible.</div>
+          <div class="modal-footer">
+            <button
+              class="btn btn-danger"
+              data-bs-target="#DeleteAccountConfirm"
+              data-bs-toggle="modal"
+              data-bs-dismiss="modal"
+            >
+              Continue
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="modal fade"
+      id="DeleteAccountConfirm"
+      data-bs-backdrop="static"
+      data-bs-keyboard="false"
+      tabindex="-1"
+      aria-labelledby="DeleteAccountConfirmLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="DeleteAccountConfirmLabel">
+              Confirm deletion
+            </h1>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            This will permanently delete your account and all associated data.
+            <form method="post" action="/delete_account">
+              <div class="my-3">
+                <label for="password" class="col-form-label">Password</label>
+                <input type="text" class="form-control" id="password" name="password" required>
+              </div>
+              <div class="my-3">
+                <button type="submit" class="btn btn-danger">Delete</button>
+                <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Cancel
+              </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -25,7 +25,7 @@ def get_db():
         db.execute("""
             CREATE TABLE IF NOT EXISTS Computers (
                 email TEXT NOT NULL,
-                server_name TEXT PRIMARY KEY,
+                computer_name TEXT PRIMARY KEY,
                 description TEXT NOT NULL,
                 os TEXT NOT NULL,
                 ram INTEGER NOT NULL,
@@ -72,6 +72,11 @@ def index():
     logged_in = flask_login.current_user.is_authenticated
     return render_template('index.html', user_agent=user_agent, logged_in=logged_in)
 
+@flask_login.login_required
+@app.route('/settings')
+def settings():
+    return render_template('settings.html')
+
 @app.route('/dashboard/computers')
 @flask_login.login_required
 def dashboard():
@@ -103,7 +108,7 @@ def add_computer():
     get_db().commit()
     cur.close()
     flash("computer added successfully :D", "success")
-    return redirect(url_for('computers'))
+    return redirect(url_for('dashboard'))
 
 @app.route('/dashboard/remove_computer', methods=['GET'])
 @flask_login.login_required
@@ -114,8 +119,7 @@ def remove_computer():
     cur.execute("DELETE FROM Computers WHERE computer_name = ? AND email = ?",(computer_name, email))
     get_db().commit()
     cur.close()
-    flash("computer deleted successfully :(", "success")
-    return redirect(url_for('computers'))
+    return redirect(url_for('dashboard'))
 
 @app.route('/dashboard/servers')
 @flask_login.login_required
@@ -242,6 +246,34 @@ def logout():
     user_agent = request.user_agent.string
     flash("log out :(", "success")
     return render_template('index.html', user_agent=user_agent)
+
+@flask_login.login_required
+@app.route('/delete_account', methods=['POST'])
+def delete_account():
+    data = request.form
+    password = data.get('password')
+    user_agent = request.user_agent.string
+    cur = get_db().cursor()
+    cur.execute("SELECT password, password_salt FROM Users WHERE email = ?", (flask_login.current_user.id,))
+    row = cur.fetchone()
+    if not row:
+        cur.close()
+        flash("unauthorized :(", "error")
+        return render_template('login.html', user_agent=user_agent)
+    hashed_password, salt = row
+    if secrets.compare_digest(bcrypt.hashpw(password.encode(), salt.encode()), hashed_password.encode()):
+        cur.execute("DELETE FROM Users WHERE email = ?", (flask_login.current_user.id,))
+        cur.execute("DELETE FROM Servers WHERE email = ?",(flask_login.current_user.id,))
+        cur.execute("DELETE FROM Computers WHERE email = ?",(flask_login.current_user.id,))
+        get_db().commit()
+        cur.close()
+        flask_login.logout_user()
+        flash("account deleted successfully :(", "success")
+        return render_template('index.html', user_agent=user_agent)
+    else:
+        cur.close()
+        flash("incorrect password :(", "error")
+        return render_template('settings.html')
 
 #@app.route('/example')
 #@flask_login.login_required
