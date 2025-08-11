@@ -7,6 +7,7 @@ app.secret_key = os.environ.get("SECRET_KEY")
 login_manager = flask_login.LoginManager()
 login_manager.init_app(app)
 from werkzeug.utils import secure_filename
+from contextlib import closing
 
 # thanks csd4ni3l
 def get_db():
@@ -70,7 +71,12 @@ def user_loader(user_id):
 def index():
     user_agent = request.user_agent
     logged_in = flask_login.current_user.is_authenticated
-    return render_template('index.html', user_agent=user_agent, logged_in=logged_in)
+    if logged_in:
+        with closing(get_db().cursor()) as cur:
+            cur.execute("SELECT username FROM Users WHERE email = ?", (flask_login.current_user.id,))
+            row = cur.fetchone()
+            username = row[0] if row else None
+    return render_template('index.html', user_agent=user_agent, logged_in=logged_in, username=username)
 
 @flask_login.login_required
 @app.route('/settings')
@@ -193,7 +199,7 @@ def login():
             user.id = email
             flask_login.login_user(user, remember=True)
             flash("logged in successfully :D", "success")
-            return render_template('index.html', user_agent=user_agent)
+            return redirect(url_for('index'))
         else:
             cur.close()
             flash("incorrect password :(", "error")
@@ -232,7 +238,7 @@ def signup():
         user.id = email
         flask_login.login_user(user, remember=True)
         flash("signed up successfully :D", "success")
-        return render_template('index.html', user_agent=user_agent)
+        return redirect(url_for('index'))
     user_agent = request.user_agent
     logged_in = flask_login.current_user.is_authenticated
     if logged_in:
@@ -245,7 +251,7 @@ def logout():
     flask_login.logout_user()
     user_agent = request.user_agent.string
     flash("log out :(", "success")
-    return render_template('index.html', user_agent=user_agent)
+    return redirect(url_for('index'))
 
 @flask_login.login_required
 @app.route('/delete_account', methods=['POST'])
@@ -269,11 +275,26 @@ def delete_account():
         cur.close()
         flask_login.logout_user()
         flash("account deleted successfully :(", "success")
-        return render_template('index.html', user_agent=user_agent)
+        return redirect(url_for('index'))
     else:
         cur.close()
         flash("incorrect password :(", "error")
         return render_template('settings.html')
+
+@flask_login.login_required
+@app.route('/change_name', methods=['POST'])
+def change_name():
+    new_name = request.form.get('new-name')
+    cur = get_db().cursor()
+    cur.execute("""
+        UPDATE Users
+        SET username = ?
+        WHERE email = ?
+    """, (new_name, flask_login.current_user.id))
+    get_db().commit()
+    cur.close()
+    flash("name changed!", "success")
+    return redirect(url_for('settings'))
 
 #@app.route('/example')
 #@flask_login.login_required

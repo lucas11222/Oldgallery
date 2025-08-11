@@ -20,6 +20,9 @@
       <div class="container-fluid">
         <a class="navbar-brand" href="/">Oldgallery</a>
         <div class="d-flex btn gap-2">
+          <span class="navbar-text">
+            Hello {{ username }}!
+          </span>
           <a href="/settings" class="btn btn-primary">Settings</a>
           <a href="/dashboard/computers" class="btn btn-primary">Computers</a>
           <a href="/dashboard/servers" class="btn btn-primary">Servers</a>
@@ -42,6 +45,15 @@
           <div class="m-3 text-center">
             <h5 class="card-title">Settings</h5>
           </div>
+          <form method="post" action="/change_name">
+            <div class="m-3">
+              <label for="new-name" class="col-form-label">New name</label>
+              <input type="text" class="form-control" id="new-name" name="new-name" required>
+            </div>
+            <div class="m-3">
+              <button type="submit" class="btn btn-primary">Change name</button>
+            </div>
+          </form>
           <div class="m-3">
             <button
               type="button"
@@ -51,7 +63,6 @@
             >
               Delete account
             </button>
-          </a>
           </div>
           <div class="m-3">
             <a
@@ -129,7 +140,7 @@
             <form method="post" action="/delete_account">
               <div class="my-3">
                 <label for="password" class="col-form-label">Password</label>
-                <input type="text" class="form-control" id="password" name="password" required>
+                <input type="password" class="form-control" id="password" name="password" required>
               </div>
               <div class="my-3">
                 <button type="submit" class="btn btn-danger">Delete</button>

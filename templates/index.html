@@ -25,6 +25,9 @@
 	<div class="position-absolute top-50 start-50 translate-middle text-center">
 		<div class="card">
 			<div class="gap-2 card-body">
+				{% if current_user.is_authenticated %}
+				<h3 class="card-title">Welcome {{ username }}!</h3>
+				{% endif %}
 				<h5 class="card-title">Oldgallery</h5>
 				Hello! This is Oldgallery, is a computer gallery (An computer gallery is a gallery of all your computers) but theres a catch...
 				When you login. You need to have the same user agent as when you created the account. Or else you cannot login.
