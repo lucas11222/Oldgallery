@@ -45,8 +45,9 @@ def get_db():
                 cpu TEXT NOT NULL,
                 gpu TEXT NOT NULL,
                 storage INTEGER NOT NULL,
-                ssh INTEGER NOT NULL,
-                url INTEGER NOT NULL
+                ssh TEXT NOT NULL,
+                url TEXT NOT NULL,
+                private_ip TEXT NOT NULL
             )
         """)
         db.commit()
@@ -71,12 +72,7 @@ def user_loader(user_id):
 def index():
     user_agent = request.user_agent
     logged_in = flask_login.current_user.is_authenticated
-    if logged_in:
-        with closing(get_db().cursor()) as cur:
-            cur.execute("SELECT username FROM Users WHERE email = ?", (flask_login.current_user.id,))
-            row = cur.fetchone()
-            username = row[0] if row else None
-    return render_template('index.html', user_agent=user_agent, logged_in=logged_in, username=username)
+    return render_template('index.html', user_agent=user_agent, logged_in=logged_in)
 
 @flask_login.login_required
 @app.route('/settings')
@@ -132,7 +128,7 @@ def remove_computer():
 def servers():
     cur = get_db().cursor()
     email = flask_login.current_user.id
-    cur.execute("SELECT server_name, description, os, ram, cpu, gpu, storage FROM Servers WHERE email = ?", (email,))
+    cur.execute("SELECT server_name, description, os, ram, cpu, gpu, storage, ssh, url, private_ip FROM Servers WHERE email = ?", (email,))
     rows = cur.fetchall()
     return render_template('servers.html', rows=rows)
 
@@ -149,14 +145,15 @@ def add_servers():
     storage = data.get('Server-storage')
     ssh = data.get('Server-ssh')
     url = data.get('Server-url')
+    private_ip = data.get('Server-ip')
     cur = get_db().cursor()
     email = flask_login.current_user.id
-    cur.execute("SELECT 1 FROM Server WHERE email = ? AND server_name = ?", (email, server_name))
+    cur.execute("SELECT 1 FROM Servers WHERE email = ? AND server_name = ?", (email, server_name))
     if cur.fetchone():
         flash("A computer with this name already exists :(", "error")
         cur.close()
         return redirect(url_for('servers'))
-    cur.execute("INSERT INTO Server (email, server_name, description, os, ram, cpu, gpu, storage, ssh, url) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (email, server_name, description, os, ram, cpu, gpu, storage, ssh, url))
+    cur.execute("INSERT INTO Servers (email, server_name, description, os, ram, cpu, gpu, storage, ssh, url, private_ip) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (email, server_name, description, os, ram, cpu, gpu, storage, ssh, url, private_ip))
     get_db().commit()
     cur.close()
     flash("server added successfully :D", "success")

@@ -39,7 +39,7 @@
 			  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 			</div>
 			<div class="modal-body">
-				<form method="post" action="/dashboard/add_Server">
+				<form method="post" action="/dashboard/add_Servers">
 					<div class="mb-3">
 					  <label for="Server-name" class="col-form-label">Name</label>
 					  <input type="text" class="form-control" id="Server-name" name="Server-name" required>
@@ -76,6 +76,10 @@
 						<label for="Server-url" class="col-form-label">URL</label>
 						<input type="text" class="form-control" id="Server-url" name="Server-url" required>
 					</div>
+					<div class="mb-3">
+						<label for="Server-ip" class="col-form-label">Private IP</label>
+						<input type="text" class="form-control" id="Server-ip" name="Server-ip" required>
+					</div>
 					<button type="submit" class="btn btn-primary">Add Server</button>
 				</form>
 			</div>
@@ -88,7 +92,7 @@
 				<div class="card-body">
 					<h5 class="card-title">{{ item.0 }}</h5>
 					<h6 class="card-subtitle mb-2 text-body-secondary">{{ item.1 }}</h6>
-					<a class="btn btn-danger" href="/dashboard/remove_Server?name={{ item.0 }}" role="button">Delete</a>
+					<a class="btn btn-danger" href="/dashboard/remove_Servers?name={{ item.0 }}" role="button">Delete</a>
   				</div>
 				<ul class="list-group list-group-flush">
 					<li class="list-group-item">OS: {{ item.2 }}</li>
@@ -96,6 +100,9 @@
 					<li class="list-group-item">CPU: {{ item.4 }}</li>
 					<li class="list-group-item">GPU: {{ item.5 }}</li>
 					<li class="list-group-item">Storage: {{ item.6 }}GB</li>
+					<li class="list-group-item">SSH command: {{ item.7 }}</li>
+					<li class="list-group-item">URL: {{ item.8 }}</li>
+					<li class="list-group-item">Private IP: {{ item.9 }}</li>
 				</ul>
 			</div>
 		{% endfor %}
