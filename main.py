@@ -103,9 +103,14 @@ def add_computer():
     email = flask_login.current_user.id
     cur.execute("SELECT 1 FROM Computers WHERE email = ? AND computer_name = ?", (email, computer_name))
     if cur.fetchone():
-        flash("A computer with this name already exists :(", "error")
+        flash("a computer with this name already exists :(", "error")
         cur.close()
-        return redirect(url_for('computers'))
+        return redirect(url_for('dashboard'))
+    cur.execute("SELECT * FROM Computers")
+    if len(cur.fetchall()) >= 6:
+        flash("you can only have 6 computers :(", "error")
+        cur.close()
+        return redirect(url_for('dashboard'))
     cur.execute("INSERT INTO Computers (email, computer_name, description, os, ram, cpu, gpu, storage) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", (email, computer_name, description, os, ram, cpu, gpu, storage))
     get_db().commit()
     cur.close()
@@ -151,6 +156,11 @@ def add_servers():
     cur.execute("SELECT 1 FROM Servers WHERE email = ? AND server_name = ?", (email, server_name))
     if cur.fetchone():
         flash("A computer with this name already exists :(", "error")
+        cur.close()
+        return redirect(url_for('servers'))
+    cur.execute("SELECT * FROM Servers")
+    if len(cur.fetchall()) >= 6:
+        flash("you can only have 6 servers :(", "error")
         cur.close()
         return redirect(url_for('servers'))
     cur.execute("INSERT INTO Servers (email, server_name, description, os, ram, cpu, gpu, storage, ssh, url, private_ip) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (email, server_name, description, os, ram, cpu, gpu, storage, ssh, url, private_ip))

@@ -7,7 +7,7 @@
 </head>
 <body>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js" integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q" crossorigin="anonymous"></script>
-	<nav class="navbar bg-body-tertiary">
+	<nav class="navbar bg-body-tertiary z-1 fixed-top">
 		<div class="container-fluid">
 		  <a class="navbar-brand" href="/">Oldgallery</a>
 		  <div class="d-flex btn gap-2">
@@ -17,19 +17,6 @@
 		</div>
 		</div>
 	</nav>
-	<div class="m-3">
-		<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#AddComputer">Add computer</button>
-		{% with messages = get_flashed_messages(with_categories=true) %}
-		{% if messages %}
-			{% for category, message in messages %}
-				<div class="alert alert-{{ 'danger' if category == 'error' else category }}"
-					 role="alert" style="width: 20rem; margin-top: 10px;">
-					{{ message }}
-				</div>
-			{% endfor %}
-		{% endif %}
-	{% endwith %}
-	</div>
 	<div class="modal fade" id="AddComputer" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="AddComputerLabel" aria-hidden="true">
 		<div class="modal-dialog">
 		  <div class="modal-content">
@@ -73,11 +60,24 @@
 		  </div>
 		</div>
 	</div>
-	<div class="position-absolute top-50 start-50 translate-middle text-center" style="margin-top: 100px">
+	<div style="margin-top: 80px; margin-left: 15px;">
+		<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#AddComputer">Add computer</button>
+		{% with messages = get_flashed_messages(with_categories=true) %}
+		{% if messages %}
+			{% for category, message in messages %}
+				<div class="alert alert-{{ 'danger' if category == 'error' else category }}"
+					 role="alert" style="width: 20rem; margin-top: 10px;">
+					{{ message }}
+				</div>
+			{% endfor %}
+		{% endif %}
+	{% endwith %}
+	</div>
+	<div class="position-absolute top-50 start-50 translate-middle text-center row" style="margin-top: 200px;">
 		{% for item in rows %}
 			<div class="card" style="margin: 15px; width: 18rem;">
 				<div class="card-body">
-					<h5 class="card-title">{{ item.0 }}</h5>
+					<h5 class="card-title text-truncate">{{ item.0 }}</h5>
 					<h6 class="card-subtitle mb-2 text-body-secondary">{{ item.1 }}</h6>
 					<a class="btn btn-danger" href="/dashboard/remove_computer?name={{ item.0 }}" role="button">Delete</a>
   				</div>
