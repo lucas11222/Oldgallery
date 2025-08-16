@@ -70,9 +70,8 @@ def user_loader(user_id):
 
 @app.route('/')
 def index():
-    user_agent = request.user_agent
     logged_in = flask_login.current_user.is_authenticated
-    return render_template('index.html', user_agent=user_agent, logged_in=logged_in)
+    return render_template('index.html', logged_in=logged_in)
 
 @flask_login.login_required
 @app.route('/settings')
@@ -210,13 +209,13 @@ def login():
         else:
             cur.close()
             flash("incorrect password :(", "error")
-            return render_template('login.html', user_agent=user_agent)
+            return render_template('login.html')
     user_agent = request.user_agent
     logged_in = flask_login.current_user.is_authenticated
     if logged_in:
         flash("you are already logged in :D", "success")
         return redirect(url_for('index'))
-    return render_template('login.html', user_agent=user_agent)
+    return render_template('login.html')
 
 
 @app.route('/signup', methods=['GET', 'POST'])
@@ -251,7 +250,7 @@ def signup():
     if logged_in:
         flash("you are already logged in :D", "success")
         return redirect(url_for('index'))
-    return render_template('signup.html', user_agent=user_agent)
+    return render_template('signup.html')
 
 @app.route('/logout')
 def logout():

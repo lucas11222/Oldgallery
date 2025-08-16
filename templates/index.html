@@ -28,7 +28,6 @@
 				<h5 class="card-title">Oldgallery</h5>
 				Hello! This is Oldgallery, is a computer gallery (An computer gallery is a gallery of all your computers) but theres a catch...
 				When you login. You need to have the same user agent as when you created the account. Or else you cannot login.
-				<p>User agent: {{user_agent}}</p>
 				{% with messages = get_flashed_messages(with_categories=true) %} {%
 					if messages %} {% for category, message in messages %}
 					<div class="alert alert-success" style="margin-top: 15px" role="alert">{{ message }}</div>
