@@ -1,5 +1,7 @@
 # Oldgallery
 
+![screenshot](assets/screenshot.png)
+
 ## Oldgallery is a computer gallery (An computer gallery is a gallery of all your computers.)
 
 # But....
