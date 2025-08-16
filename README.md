@@ -11,6 +11,6 @@
 the ui dosent look great in phones soo
 
 # Vulnearvility:
-You can change the user agent with a extension
+You can view/change the user agent with a extension
 
 # Made for [Authly](https://authly.hackclub.com/home.html)
