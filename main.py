@@ -312,4 +312,4 @@ def unauthorized_handler():
     flash("you must be logged in to access this page :(", "error")
     return redirect("/login")
 
-app.run(debug=True, port=6969)
+app.run(port=6969, host='0.0.0.0')
