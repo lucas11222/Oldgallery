@@ -71,7 +71,8 @@ def user_loader(user_id):
 @app.route('/')
 def index():
     logged_in = flask_login.current_user.is_authenticated
-    return render_template('index.html', logged_in=logged_in)
+    user_agent = request.user_agent.string
+    return render_template('index.html', logged_in=logged_in, user_agent=user_agent)
 
 @flask_login.login_required
 @app.route('/settings')
@@ -215,7 +216,8 @@ def login():
     if logged_in:
         flash("you are already logged in :D", "success")
         return redirect(url_for('index'))
-    return render_template('login.html')
+    user_agent = request.user_agent.string
+    return render_template('login.html', user_agent=user_agent)
 
 
 @app.route('/signup', methods=['GET', 'POST'])
@@ -250,7 +252,7 @@ def signup():
     if logged_in:
         flash("you are already logged in :D", "success")
         return redirect(url_for('index'))
-    return render_template('signup.html')
+    return render_template('signup.html', user_agent=user_agent)
 
 @app.route('/logout')
 def logout():
